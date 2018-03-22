@@ -28,6 +28,7 @@ WORKDIR="${THIS_DIR}"/mpdecimal_temp.$$
 LIBMPDECDIR="${WORKDIR}"/libmpdec
 MPDECIMAL_HEADER="${LIBMPDECDIR}"/mpdecimal.h
 TMP_MPDECIMAL_HEADER="${LIBMPDECDIR}"/mpdecimal.h.tmp.$$
+DESTDIR="${THIS_DIR}"/generated
 
 mpdec_header="
 /*
@@ -53,9 +54,9 @@ cd -
 cat <(echo "${mpdec_header}") "${WORKDIR}"/config.h <(echo "${mpdec_header}") "${MPDECIMAL_HEADER}" > "${TMP_MPDECIMAL_HEADER}"
 mv "${TMP_MPDECIMAL_HEADER}" "${MPDECIMAL_HEADER}"
 
-# 4. Copy the C sources to a "generated" folder
-mkdir -p "${THIS_DIR}"/generated
-cp "${LIBMPDECDIR}"/*.{c,h} "${THIS_DIR}"/generated/
+# 4. Copy the C sources to the destination folder
+mkdir -p "${DESTDIR}"
+cp "${LIBMPDECDIR}"/*.{c,h} "${DESTDIR}"
 
 # 5. Delete the working dir
 rm -r "${WORKDIR}"
