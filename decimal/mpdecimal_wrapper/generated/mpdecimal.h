@@ -3,7 +3,7 @@
  *
  * mpdecimal.h
  * Auto generated for https://github.com/status-im/nim-decimal
- * This file is platform dependant, make sure you run 'nim e genSources.sh'
+ * This file is platform dependant, make sure you run 'genSources.sh'
  * to get the best support for your platform.
  *
  */
@@ -115,7 +115,7 @@
  *
  * mpdecimal.h
  * Auto generated for https://github.com/status-im/nim-decimal
- * This file is platform dependant, make sure you run 'nim e genSources.sh'
+ * This file is platform dependant, make sure you run 'genSources.sh'
  * to get the best support for your platform.
  *
  */
