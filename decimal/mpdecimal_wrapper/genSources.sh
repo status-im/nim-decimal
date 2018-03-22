@@ -33,12 +33,13 @@ DESTDIR="${THIS_DIR}"/generated
 mpdec_header="
 /*
  *
- * mpdecimal.h
  * Auto generated for https://github.com/status-im/nim-decimal
- * This file is platform dependant, make sure you run 'genSources.sh'
+ * This file includes config.h which is platform dependant, make sure you run 'genSources.sh'
  * to get the best support for your platform.
  *
  */
+
+#include \"config.h\"
 
 "
 
@@ -50,13 +51,16 @@ cd "${WORKDIR}"
 ./configure
 cd -
 
-# 3. We prepend config.h to mpdecimal.h and also add the header
-cat <(echo "${mpdec_header}") "${WORKDIR}"/config.h <(echo "${mpdec_header}") "${MPDECIMAL_HEADER}" > "${TMP_MPDECIMAL_HEADER}"
-mv "${TMP_MPDECIMAL_HEADER}" "${MPDECIMAL_HEADER}"
-
-# 4. Copy the C sources to the destination folder
+# 3. We move config.h to the destination folder
 mkdir -p "${DESTDIR}"
-cp "${LIBMPDECDIR}"/*.{c,h} "${DESTDIR}"
+mv "${WORKDIR}"/config.h "${DESTDIR}"
+
+# 4. Copy the C sources to the destination folder and prepend our header
+shopt -s nullglob # Don't match empty dir
+                  # ${file##*/} will only keep the filename of the file
+for file in $(ls "${LIBMPDECDIR}"/*.{c,h}); do
+  cat <(echo "${mpdec_header}") "${file}" > "${DESTDIR}"/"${file##*/}"
+done
 
 # 5. Delete the working dir
 rm -r "${WORKDIR}"

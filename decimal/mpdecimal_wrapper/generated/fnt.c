@@ -1,3 +1,15 @@
+
+/*
+ *
+ * Auto generated for https://github.com/status-im/nim-decimal
+ * This file includes config.h which is platform dependant, make sure you run 'genSources.sh'
+ * to get the best support for your platform.
+ *
+ */
+
+#include "config.h"
+
+
 /*
  * Copyright (c) 2008-2016 Stefan Krah. All rights reserved.
  *

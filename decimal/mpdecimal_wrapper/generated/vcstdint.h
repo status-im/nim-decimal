@@ -1,3 +1,15 @@
+
+/*
+ *
+ * Auto generated for https://github.com/status-im/nim-decimal
+ * This file includes config.h which is platform dependant, make sure you run 'genSources.sh'
+ * to get the best support for your platform.
+ *
+ */
+
+#include "config.h"
+
+
 // ISO C9x  compliant stdint.h for Microsoft Visual Studio
 // Based on ISO/IEC 9899:TC2 Committee draft (May 6, 2005) WG14/N1124
 //
