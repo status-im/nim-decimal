@@ -1,0 +1,10 @@
+# Travis config for Decimal using Status Nim docker.
+
+sudo: required
+services:
+  - docker
+before_install:
+  - docker pull statusteam/nim-base
+script:
+  - docker run statusteam/nim-base nim --version
+  - docker run -v "$(pwd):/project" -w /project statusteam/nim-base sh -c "nimble install -dy && nimble test"
