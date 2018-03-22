@@ -15,14 +15,18 @@ nimble install https://github.com/status-im/nim-decimal@#master
 
 ## License
 
+### Library license
+
 This library is licensed and distributed under either of
   * MIT license (license terms in the root directory or at http://opensource.org/licenses/MIT).
   * Apache v2 license (license terms in the root directory or at http://www.apache.org/licenses/LICENSE-2.0).
 at your option. This file may not be copied, modified, or distributed except according to those terms.
 
 
+### Dependency license
+
 This library depends and redistribute mpdecimal.
-mpdecimal is available here: http://www.bytereef.org/mpdecimal/index.html
+mpdecimal is available at http://www.bytereef.org/mpdecimal/index.html
 
 Mpdecimal is licensed under the following Simplified BSD terms (BSD 2-clause).
 
