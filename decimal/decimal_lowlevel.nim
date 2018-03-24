@@ -359,7 +359,7 @@ type
   mpd_spec_t* {.importc: "mpd_spec_t", header: cHeader, bycopy.} = object
     min_width* {.importc: "min_width".}: mpd_ssize_t ##  minimum field width
     prec* {.importc: "prec".}: mpd_ssize_t ##  fraction digits or significant digits
-    mpd_type* {.importc: "type".}: char ##  conversion specifier ### MODIFIED for Nim compat ###
+    Ttype* {.importc: "type".}: char ##  conversion specifier ### MODIFIED for Nim compat ###
     align* {.importc: "align".}: char ##  alignment
     sign* {.importc: "sign".}: char ##  sign printing/alignment
     fill* {.importc: "fill".}: array[5, char] ##  fill character
@@ -419,7 +419,7 @@ proc mpd_seterror*(result: ptr mpd_t; flags: uint32; status: ptr uint32) {.cdecl
     importc: "mpd_seterror", header: cHeader.}
 ##  set a special with sign and type
 
-proc mpd_setspecial*(dec: ptr mpd_t; sign: uint8; `type`: uint8) {.cdecl,
+proc mpd_setspecial*(dec: ptr mpd_t; sign: uint8; Ttype: uint8) {.cdecl,
     importc: "mpd_setspecial", header: cHeader.}
 ##  set coefficient to zero or all nines
 
