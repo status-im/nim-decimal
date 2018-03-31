@@ -18,7 +18,7 @@ proc test(name: string, defaultLang = "c") =
   --run
   --nimcache: "nimcache"
   switch("out", ("./build/" & name))
-  setCommand lang, "tests/" & name & ".nim"
+  setCommand defaultLang, "tests/" & name & ".nim"
 
 ### tasks
 task test, "Run all tests":
