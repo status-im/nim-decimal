@@ -1,10 +1,22 @@
-# Travis config for Decimal using Status Nim docker.
+language: c # or other C/C++ variants
 
-sudo: required
-services:
-  - docker
-before_install:
-  - docker pull statusteam/nim-base
+sudo: false
+
+# https://docs.travis-ci.com/user/caching/
+cache:
+  directories:
+    - nim
+
+os:
+  - linux
+  - osx
+
+install:
+  # build nim from our own branch, to avoid downtime due to nim regressions
+  - "export NIMVER=$(git ls-remote https://github.com/status-im/nim.git HEAD | cut -f 1)"
+  - "{ [ -f nim/$NIMVER/bin/nim ] && [ -f nim/$NIMVER/bin/nimble ] ; } || { rm -rf nim ; mkdir -p nim; git clone https://github.com/status-im/nim.git nim/$NIMVER; cd nim/$NIMVER; sh build_all.sh; cd ../.. ; }"
+  - "export PATH=$PWD/nim/$NIMVER/bin:$PATH"
+
 script:
-  - docker run statusteam/nim-base nim --version
-  - docker run -v "$(pwd):/project" -w /project statusteam/nim-base sh -c "nimble install -dy && nimble test"
+  - nimble install -dy && nimble test
+
