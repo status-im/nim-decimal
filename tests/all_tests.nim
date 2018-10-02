@@ -6,11 +6,8 @@
 # at your option. This file may not be copied, modified, or distributed except according to those terms.
 
 import  unittest,
-        ../src/decimal
+        ../decimal/decimal
 
-suite "Your first test suite":
-  test "Your first test":
-    block: # independant block of subtest
-      discard
-    block:
-      discard
+suite "Mock compile test":
+  test "Nim-decimal and its wrapped library compiles":
+    discard
