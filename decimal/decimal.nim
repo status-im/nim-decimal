@@ -31,25 +31,75 @@ proc `$`*(s: DecimalType): string =
   ## Convert DecimalType to string
   $mpd_to_sci(s[], 0)
 
+proc deleteDecimal(x: DecimalType) =
+  if not x.isNil:          # Managed by Nim
+    assert(not(x[].isNil)) # Managed by MpDecimal
+    mpd_del(x[])
+
 proc newDecimal*(): DecimalType =
   ## Initialize a empty DecimalType
-  new result
+  new result, deleteDecimal
   result[] = mpd_qnew()
 
 proc newDecimal*(s: string): DecimalType =
   ## Create a new DecimalType from a string
-  new result
+  new result, deleteDecimal
   result[] = mpd_qnew()
   mpd_set_string(result[], s, CTX_ADDR)
 
 proc newDecimal*(s: int): DecimalType =
-  ## Create a new DecimalType from a int64
-  new result
+  ## Create a new DecimalType from an int
+  new result, deleteDecimal
   result[] = mpd_qnew()
   when (sizeof(int) == 8):
     mpd_set_i64(result[], s, CTX_ADDR)
   else:
     mpd_set_i32(result[], s, CTX_ADDR)
+
+proc newDecimal*(s: int64): DecimalType =
+  ## Create a new DecimalType from a uint64
+  new result, deleteDecimal
+  result[] = mpd_qnew()
+  mpd_set_i64(result[], s, CTX_ADDR)
+
+proc newDecimal*(s: int32): DecimalType =
+  ## Create a new DecimalType from a uint32
+  new result, deleteDecimal
+  result[] = mpd_qnew()
+  mpd_set_i32(result[], s, CTX_ADDR)
+
+proc newDecimal*(s: int8 or uint16): DecimalType =
+  ## Create a new DecimalType from a int64
+  new result, deleteDecimal
+  result[] = mpd_qnew()
+  mpd_set_i32(result[], int32(s), CTX_ADDR)
+
+proc newDecimal*(s: uint): DecimalType =
+  ## Create a new DecimalType from an uint
+  new result, deleteDecimal
+  result[] = mpd_qnew()
+  when (sizeof(uint) == 8):
+    mpd_set_u64(result[], s, CTX_ADDR)
+  else:
+    mpd_set_u32(result[], s, CTX_ADDR)
+
+proc newDecimal*(s: uint64): DecimalType =
+  ## Create a new DecimalType from a uint64
+  new result, deleteDecimal
+  result[] = mpd_qnew()
+  mpd_set_u64(result[], s, CTX_ADDR)
+
+proc newDecimal*(s: uint32): DecimalType =
+  ## Create a new DecimalType from a uint32
+  new result, deleteDecimal
+  result[] = mpd_qnew()
+  mpd_set_u32(result[], s, CTX_ADDR)
+
+proc newDecimal*(s: uint8 or uint16): DecimalType =
+  ## Create a new DecimalType from a int64
+  new result, deleteDecimal
+  result[] = mpd_qnew()
+  mpd_set_u32(result[], uint32(s), CTX_ADDR)
 
 proc clone*(b: DecimalType): DecimalType =
   ## Clone a DecimalType and returns a new independent one
@@ -67,10 +117,10 @@ proc `+`*(a, b: DecimalType): DecimalType =
   mpd_qadd(result[], a[], b[], CTX_ADDR, addr status)
 
 template `+`*[T: SomeNumber](a: DecimalType, b: T): untyped =
-  a + newDecimal($b)
+  a + newDecimal(b)
 
 template `+`*[T: SomeNumber](a: T, b: DecimalType): untyped =
-  newDecimal($a) + b
+  newDecimal(a) + b
 
 proc `+=`*(a, b: DecimalType) =
   ## Inplace addition
@@ -78,7 +128,7 @@ proc `+=`*(a, b: DecimalType) =
   mpd_qadd(a[], a[], b[], CTX_ADDR, addr status)
 
 template `+=`*[T: SomeNumber](a: DecimalType, b: T): untyped =
-  a += newDecimal($b)
+  a += newDecimal(b)
 
 
 
@@ -88,10 +138,10 @@ proc `-`*(a, b: DecimalType): DecimalType =
   mpd_qsub(result[], a[], b[], CTX_ADDR, addr status)
 
 template `-`*[T: SomeNumber](a: DecimalType, b: T): untyped =
-  a - newDecimal($b)
+  a - newDecimal(b)
 
 template `-`*[T: SomeNumber](a: T, b: DecimalType): untyped =
-  newDecimal($a) - b
+  newDecimal(a) - b
 
 proc `-=`*(a, b: DecimalType) =
   ## Inplace subtraction
@@ -99,7 +149,7 @@ proc `-=`*(a, b: DecimalType) =
   mpd_qsub(a[], a[], b[], CTX_ADDR, addr status)
 
 template `-=`*[T: SomeNumber](a: DecimalType, b: T) =
-  a -= newDecimal($b)
+  a -= newDecimal(b)
 
 
 proc `*`*(a, b: DecimalType): DecimalType =
@@ -108,10 +158,10 @@ proc `*`*(a, b: DecimalType): DecimalType =
   mpd_qmul(result[], a[], b[], CTX_ADDR, addr status)
 
 template `*`*[T: SomeNumber](a: T, b: DecimalType): untyped =
-  newDecimal($a) * b
+  newDecimal(a) * b
 
 template `*`*[T: SomeNumber](a: DecimalType, b: T): untyped =
-  newDecimal($b) * a
+  newDecimal(b) * a
 
 proc `*=`*(a, b: DecimalType) =
   ## Inplace multiplication
@@ -119,7 +169,7 @@ proc `*=`*(a, b: DecimalType) =
   mpd_qmul(a[], a[], b[], CTX_ADDR, addr status)
 
 template `*=`*[T: SomeNumber](a: DecimalType, b: T) =
-  a *= newDecimal($b)
+  a *= newDecimal(b)
 
 
 
@@ -129,10 +179,10 @@ proc `/`*(a, b: DecimalType): DecimalType =
   mpd_qdiv(result[], a[], b[], CTX_ADDR, addr status)
 
 template `/`*[T: SomeNumber](a: DecimalType, b: T): untyped =
-  a / newDecimal($b)
+  a / newDecimal(b)
 
 template `/`*[T: SomeNumber](a: T, b: DecimalType): untyped =
-  newDecimal($a) / b
+  newDecimal(a) / b
 
 proc `/=`*(a, b: DecimalType) =
   ## Inplace division
@@ -140,7 +190,7 @@ proc `/=`*(a, b: DecimalType) =
   mpd_qdiv(a[], a[], b[], CTX_ADDR, addr status)
 
 template `/=`*[T: SomeNumber](a: DecimalType, b: T): untyped =
-  a /= newDecimal($b)
+  a /= newDecimal(b)
 
 
 
@@ -151,7 +201,7 @@ proc `//`*(a, b: DecimalType): DecimalType =
   mpd_qdivint(result[], a[], b[], CTX_ADDR, addr status)
 
 template `//`*[T: SomeNumber](a: DecimalType, b: T): untyped =
-  a // newDecimal($b)
+  a // newDecimal(b)
 
 proc `^`*(a, b: DecimalType): DecimalType =
   ## Power operator
@@ -160,7 +210,7 @@ proc `^`*(a, b: DecimalType): DecimalType =
   mpd_qpow(result[], a[], b[], CTX_ADDR, addr status)
 
 template `^`*[T: SomeNumber](a: DecimalType, b: T): untyped =
-  a ^ newDecimal($b)
+  a ^ newDecimal(b)
 
 proc `==`*(a, b: DecimalType): bool =
   var status: uint32
@@ -171,10 +221,10 @@ proc `==`*(a, b: DecimalType): bool =
     return false
 
 template `==`*[T: SomeNumber](a: DecimalType, b: T): untyped =
-  a == newDecimal($b)
+  a == newDecimal(b)
 
 template `==`*[T: SomeNumber](a: T, b: DecimalType): untyped =
-  newDecimal($a) == b
+  newDecimal(a) == b
 
 proc `<`*(a, b: DecimalType): bool =
   var status: uint32
@@ -185,9 +235,9 @@ proc `<`*(a, b: DecimalType): bool =
     return false
 
 template `<`*[T: SomeNumber](a: DecimalType, b: T): untyped =
-  a < newDecimal($b)
+  a < newDecimal(b)
 template `<`*[T: SomeNumber](a: T, b: DecimalType): untyped =
-  newDecimal($a) < b
+  newDecimal(a) < b
 
 proc `<=`*(a, b: DecimalType): bool =
   let less_cmp = a < b
@@ -196,9 +246,9 @@ proc `<=`*(a, b: DecimalType): bool =
   if equal_cmp: return true
   return false
 template `<=`*[T: SomeNumber](a: DecimalType, b: T): untyped =
-  a <= newDecimal($b)
+  a <= newDecimal(b)
 template `<=`*[T: SomeNumber](a: T, b: DecimalType): untyped =
-  newDecimal($a) <= b
+  newDecimal(a) <= b
 
 
 
