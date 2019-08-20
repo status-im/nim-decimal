@@ -228,7 +228,7 @@ suite "Basic Arithmetic":
     let a = newDecimal("2e-5")
     let b = newDecimal("20e-6")
     let c = newDecimal("20e-5")
-    check not same_quantum(a, b)
+    check: not(same_quantum(a, b))
     check same_quantum(a, c)
   test "Decimal reduce":
     let a = newDecimal("1.2345000000000000000")
@@ -294,6 +294,6 @@ suite "Basic Arithmetic":
     check $elementwiseInvert(a) == "11111111111111111111111111111111000101"
 
 
-    
+
 
 
