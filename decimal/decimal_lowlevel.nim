@@ -1174,3 +1174,16 @@ proc mpd_resize*(result: ptr mpd_t; size: mpd_ssize_t; ctx: ptr mpd_context_t): 
     cdecl, importc: "mpd_resize", header: cHeader.}
 proc mpd_resize_zero*(result: ptr mpd_t; size: mpd_ssize_t; ctx: ptr mpd_context_t): cint {.
     cdecl, importc: "mpd_resize_zero", header: cHeader.}
+
+type
+  DecimalType* = ref[ptr mpd_t]
+
+proc deleteDecimal(x: DecimalType) =
+  if not x.isNil:          # Managed by Nim
+    assert(not(x[].isNil)) # Managed by MpDecimal
+    mpd_del(x[])
+
+proc newDecimal*(): DecimalType =
+  ## Initialize a empty DecimalType
+  new result, deleteDecimal
+  result[] = mpd_qnew()

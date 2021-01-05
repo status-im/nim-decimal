@@ -1,5 +1,5 @@
 packageName   = "Decimal"
-version       = "0.0.1"
+version       = "0.0.2"
 author        = "Status Research & Development GmbH"
 description   = "A correctly-rounded arbitrary precision decimal floating point arithmetic library"
 license       = "(MIT or Apache License 2.0) and Simplified BSD"

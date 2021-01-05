@@ -7,8 +7,9 @@
 
 import decimal_lowlevel
 
+export DecimalType, newDecimal    # type bound operation `newDecimal` and `deleteDecimal` can be defined only in the same module
+
 type
-  DecimalType* = ref[ptr mpd_t]
   DecimalError* = object of Exception
 
 const
@@ -31,26 +32,14 @@ proc `$`*(s: DecimalType): string =
   ## Convert DecimalType to string
   $mpd_to_sci(s[], 0)
 
-proc deleteDecimal(x: DecimalType) =
-  if not x.isNil:          # Managed by Nim
-    assert(not(x[].isNil)) # Managed by MpDecimal
-    mpd_del(x[])
-
-proc newDecimal*(): DecimalType =
-  ## Initialize a empty DecimalType
-  new result, deleteDecimal
-  result[] = mpd_qnew()
-
 proc newDecimal*(s: string): DecimalType =
   ## Create a new DecimalType from a string
-  new result, deleteDecimal
-  result[] = mpd_qnew()
+  result = newDecimal()
   mpd_set_string(result[], s, CTX_ADDR)
 
 proc newDecimal*(s: int): DecimalType =
   ## Create a new DecimalType from an int
-  new result, deleteDecimal
-  result[] = mpd_qnew()
+  result = newDecimal()
   when (sizeof(int) == 8):
     mpd_set_i64(result[], s, CTX_ADDR)
   else:
@@ -58,26 +47,22 @@ proc newDecimal*(s: int): DecimalType =
 
 proc newDecimal*(s: int64): DecimalType =
   ## Create a new DecimalType from a uint64
-  new result, deleteDecimal
-  result[] = mpd_qnew()
+  result = newDecimal()
   mpd_set_i64(result[], s, CTX_ADDR)
 
 proc newDecimal*(s: int32): DecimalType =
   ## Create a new DecimalType from a uint32
-  new result, deleteDecimal
-  result[] = mpd_qnew()
+  result = newDecimal()
   mpd_set_i32(result[], s, CTX_ADDR)
 
 proc newDecimal*(s: int8 or uint16): DecimalType =
   ## Create a new DecimalType from a int64
-  new result, deleteDecimal
-  result[] = mpd_qnew()
+  result = newDecimal()
   mpd_set_i32(result[], int32(s), CTX_ADDR)
 
 proc newDecimal*(s: uint): DecimalType =
   ## Create a new DecimalType from an uint
-  new result, deleteDecimal
-  result[] = mpd_qnew()
+  result = newDecimal()
   when (sizeof(uint) == 8):
     mpd_set_u64(result[], s, CTX_ADDR)
   else:
@@ -85,20 +70,17 @@ proc newDecimal*(s: uint): DecimalType =
 
 proc newDecimal*(s: uint64): DecimalType =
   ## Create a new DecimalType from a uint64
-  new result, deleteDecimal
-  result[] = mpd_qnew()
+  result = newDecimal()
   mpd_set_u64(result[], s, CTX_ADDR)
 
 proc newDecimal*(s: uint32): DecimalType =
   ## Create a new DecimalType from a uint32
-  new result, deleteDecimal
-  result[] = mpd_qnew()
+  result = newDecimal()
   mpd_set_u32(result[], s, CTX_ADDR)
 
 proc newDecimal*(s: uint8 or uint16): DecimalType =
   ## Create a new DecimalType from a int64
-  new result, deleteDecimal
-  result[] = mpd_qnew()
+  result = newDecimal()
   mpd_set_u32(result[], uint32(s), CTX_ADDR)
 
 proc clone*(b: DecimalType): DecimalType =
